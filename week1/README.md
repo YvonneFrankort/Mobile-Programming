@@ -23,11 +23,13 @@ This weeks assignment was to build a simple Android application on Android Studi
 
 \### APK
 
-Debug APK available in the week1 folder
+APK download (ZIP): 
+https://github.com/YvonneFrankort/Mobile-Programming/releases/tag/week1
 
 \### Demo video
 
-A short video to demonstrate the code and app on an emulator
+A short video to demonstrate the code and app on an emulator:
+Watch the video here: https://github.com/YvonneFrankort/Mobile-Programming/releases/tag/week1
 
 
 
