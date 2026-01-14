@@ -31,6 +31,10 @@ https://github.com/YvonneFrankort/Mobile-Programming/releases/tag/week1
 A short video to demonstrate the code and app on an emulator:
 Watch the video here: https://github.com/YvonneFrankort/Mobile-Programming/releases/tag/week1
 
+### Screenshot
+<img width="317" height="403" alt="Screenshot" src="https://github.com/user-attachments/assets/ca8b8bdc-f70b-4eeb-80ee-8d03f0b86578" />
+
+
 
 
 
