@@ -1,32 +1,32 @@
-\# Mobile Programming with Native Technologies
+# Mobile Programming with Native Technologies
 
-\## Week 1 assignment
+## Week 1 assignment
 
 
 
-\### Overview
+### Overview
 
 This weeks assignment was to build a simple Android application on Android Studio using Kotlin and Jetpack Compose
 
-\### Features
+### Features
 
 * Task list
 * Compose UI structure with separate screens and themes
 * Domain layer with Task model and mock data
 
-\### Functions
+### Functions
 
 * Toggle for completed tasks to show or hide done tasks
 * Filtering the list by criteria
 * Sorting functionality for task ordering 
 * Add new task to the task list
 
-\### APK
+### APK
 
 APK download (ZIP): 
 https://github.com/YvonneFrankort/Mobile-Programming/releases/tag/week1
 
-\### Demo video
+### Demo video
 
 A short video to demonstrate the code and app on an emulator:
 Watch the video here: https://github.com/YvonneFrankort/Mobile-Programming/releases/tag/week1
