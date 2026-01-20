@@ -38,11 +38,13 @@ This week’s assignment expands the Week 1 project by introducing ViewModel-bas
 
 ### APK
 
-Debug APK available in the Week 2 Release
+Debug APK available in the [Week 2 Release](https://github.com/YvonneFrankort/Mobile-Programming/releases/tag/week2)  
+Or download the APK directly: [app-debug.apk](https://github.com/YvonneFrankort/Mobile-Programming/releases/download/week2/app-debug.apk)
 
 ### Demo video
 
-A short video to demonstrate the code and app on an emulator: Week 2 Release
+A short video to demonstrate the code and app on an emulator: 
+[Watch video](https://github.com/YvonneFrankort/Mobile-Programming/releases/download/week2/video_week2.mp4)
 
 ### Screenshot
 ![Screenshot](Screenshot.png)
