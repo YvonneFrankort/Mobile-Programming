@@ -43,7 +43,8 @@ Or download the APK directly: [app-debug.apk](https://github.com/YvonneFrankort/
 
 ### Demo video
 
-A short video to demonstrate the code and app on an emulator: 
+A short video to demonstrate the code and app on an emulator:
+[Week 2 Release](https://github.com/YvonneFrankort/Mobile-Programming/releases/tag/week2)  
 [Watch video](https://github.com/YvonneFrankort/Mobile-Programming/releases/download/week2/video_week2.mp4)
 
 ### Screenshot
