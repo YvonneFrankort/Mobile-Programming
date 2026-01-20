@@ -3,8 +3,11 @@ This repository contains all coursework for the Mobile Programming with Native T
 Each weekly assignment is stored in its own folder, and each week includes its own README with detailed instructions and releases.
 
 ## Weekly Assignments
-Week 1 – Introduction to Android Studio, first app, APK, and demo video
+**Week 1** – Introduction to Android Studio, first app, APK, and demo video
 (Full README is inside the week1 folder)
+
+**Week 2** – Task list app with ViewModel, add/toggle/remove tasks, filtering and sorting, APK, demo video (Full README is inside the week2 folder)
+
 
 More weeks will be added as the course progresses. 
 
