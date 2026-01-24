@@ -69,10 +69,16 @@ A short video to demonstrate the code and app on an emulator: Week 3
 Release
 
 
-### Screenshot
-![Home Screen](screenshots/HomeScreen.png)
+### Screenshots
+Home Screen
 
-![Detail Screen](screenshots/DetailScreen.png)
+<img width="309" height="649" alt="HomeScreen" src="https://github.com/user-attachments/assets/b6323e4f-102b-4ded-ad09-d47e8edb12d3" />
+
+
+Detail Screen
+
+<img width="331" height="646" alt="DetailScreen" src="https://github.com/user-attachments/assets/01c17c29-5353-46f7-9b9a-b62c6a964b1d" />
+
 
 
 
