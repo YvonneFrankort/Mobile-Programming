@@ -100,16 +100,22 @@ https://youtube.com/shorts/MTh03vpIk4Q?feature=share
 
 ### Screenshot
 Home Screen
+
 <img width="339" height="596" alt="HomeScreen" src="https://github.com/user-attachments/assets/e66df666-57c6-47df-93c4-962bb5c3dd87" />
 
+
 Calendar Screen
+
 <img width="339" height="590" alt="CalendarScreen" src="https://github.com/user-attachments/assets/6c3dafe7-bf17-4d23-8900-e0714726fd85" />
 
+
 Settings Screen
+
 <img width="351" height="281" alt="SettingsScreen" src="https://github.com/user-attachments/assets/fdad632e-b842-4c35-8da9-0db9f29d5216" />
 
 
 Detail Screen
+
 <img width="345" height="614" alt="DetailScreen" src="https://github.com/user-attachments/assets/fafedbba-c4a9-4f13-af96-41299e10af6e" />
 
 
