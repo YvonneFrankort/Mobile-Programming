@@ -1,71 +1,100 @@
 # Mobile Programming with Native Technologies
 
-## Week 3 assignment
+## Week 4 assignment - Navigation with Jetpack Compose
 
 ### Overview
 
-This week’s assignment builds on the previous project by improving architecture, adding a detail/edit dialog, and making the UI fully reactive using StateFlow and MVVM. The app now has a clear layer structure and updates instantly whenever the ViewModel state changes.
+This week extends the Week 3 ToDo app by adding **navigation between multiple screens** while keeping a **shared state** with MVVM.
+
 
 ### New Features
 
-* **Edit Task dialog** (Save, Delete, Cancel)
+* **HomeScreen**
+Displays the task list, same as Week 3.
 
-* **UI updates** instantly when tasks change
+* **CalendarScreen** 
+Displays the same tasks in a calendar view, grouped by date.
 
-* Project split into model, viewmodel, and view
-
-* Cleaner and more consistent UI design
-
-
-### MVVM (Model-View-ViewModel) Architecture
-
-The project now follows the MVVM pattern:
-
-* **Model** – data classes (like Task)
-
-* **ViewModel** – app logic (add, edit, delete, filter)
-
-* **View** – the UI made with Jetpack Compose that observes ViewModel state
-
-MVVM keeps UI and logic separate, UI shows the data, ViewModel handles the logic.
+* **SettingsScreen** 
+The SettingsScreen includes a working light/dark theme toggle
 
 
-### Why use MVVM
-Compose is reactive.
-This means the UI updates automatically when the data changes.
+### What is Jetpack Compose Navigation
+Navigation is handled with **NavController** and **NavHost**.
 
-Using MVVM:
+Navigation is built using three main concepts:
+* **NavController**  
+  Switching between screens
 
-* ViewModel holds the state
+* **NavHost**  
+  Defines the navigation graph and maps routes to composable screens.
 
-* UI listens to that state
+* **Routes**  
+  String identifiers used to navigate between screens (e.g. `"home"`, `"calendar"`).
 
-* When the ViewModel updates something, the UI changes right away
+In this application, a single `NavController` is used to navigate between `HomeScreen`, `CalendarScreen`, and `SettingsScreen`.
 
-No manual refresh needed
+### Navigation UI
+The TopAppBar contains icons for navigating between Home, Calendar, and Settings.
+* Home → Calendar via calendar icon
+* Calendar → Home via list icon
+* Home → Settings via settings icon
+* Settings → Home via back arrow
+
+### Single-Activity Architecture
+* The entire app runs inside a single MainActivity.
+All navigation happens inside one activity using Jetpack Compose Navigation.
+* TaskViewModel is created at the activity level using by viewModels(), so it survives navigation and is shared across all screens.
+
+### The Architecture (MVVM and Navigation)
+The application follows the **MVVM (Model–View–ViewModel)** architecture.
+
+* One `TaskViewModel` holds all tasks.
+* HomeScreen and CalendarScreen share the same ViewModel
+* Changes in one screen are immediately visible in the other
+* ViewModel survives navigation between screens
+
+Because the same ViewModel instance is shared:
+* Changes made on one screen are immediately visible on the others.
+* The application state is preserved when navigating back and forth.
 
 
-### How StateFlow works
+### How CalendarScreen works
+`CalendarScreen` presents tasks in a **calendar-like layout**.
 
-StateFlow is a value that the UI can listen to.
+Instead of using a full calendar component, tasks are:
+* Grouped by their `dueDate`
+* Displayed under date headers (for example: `2026-01-30`)
 
-* ViewModel updates the StateFlow
+This approach makes it clear:
+* Which tasks belong to which day
+* How the calendar concept relates to the task data
 
-* UI uses collectAsState() to watch it
+The calendar view uses the same task data as `HomeScreen`, ensuring consistency across the app.
 
-* When the value changes, the UI updates automatically
 
-If the ViewModel changes tasks, the list on screen updates instantly
+### What AlertDialog does
+Adding and editing tasks is done using **AlertDialog** and not navigation.
+
+* **Add task**  
+  Triggered by an “Add” or “+” button.  
+  Opens a dialog where the user can enter task details and save or cancel.
+
+* **Edit task**  
+  Triggered by clicking an existing task.  
+  Opens a dialog with pre-filled values and allows the user to update or delete the task.
+
+Dialogs keep navigation focused on **screen-level changes** and handle temporary interactions.
 
 
 ### APK
 
-Debug APK available in the Week 3 Release
+Debug APK available in the Week 4 Release
 
 
 ### Demo video
 
-A short video to demonstrate the code and app on an emulator: Week 3
+A short video to demonstrate the code and app on an emulator: Week 4
 Release
 
 
@@ -73,6 +102,8 @@ Release
 ![Home Screen](screenshots/HomeScreen.png)
 
 ![Detail Screen](screenshots/DetailScreen.png)
+
+![Calendar Screen](screenshots/CalendarScreen.png)
 
 
 

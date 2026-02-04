@@ -10,13 +10,37 @@ import kotlinx.coroutines.flow.asStateFlow
 class TaskViewModel : ViewModel() {
 
     private val allTasks = MyTask.toMutableList()
-    
+
     private val _tasks = MutableStateFlow<List<Task>>(allTasks)
     val tasks: StateFlow<List<Task>> = _tasks.asStateFlow()
+
+    private val _selectedTask = MutableStateFlow<Task?>(null)
+    val selectedTask: StateFlow<Task?> = _selectedTask.asStateFlow()
+
+    private val _isAddDialogVisible = MutableStateFlow(false)
+    val isAddDialogVisible: StateFlow<Boolean> = _isAddDialogVisible.asStateFlow()
+
+    // --- OPEN/CLOSE DIALOGS ---
+    fun openAddDialog() {
+        _isAddDialogVisible.value = true
+    }
+
+    fun closeAddDialog() {
+        _isAddDialogVisible.value = false
+    }
+
+    fun openEditDialog(task: Task) {
+        _selectedTask.value = task
+    }
+
+    fun closeEditDialog() {
+        _selectedTask.value = null
+    }
 
     fun addTask(task: Task) {
         allTasks.add(task)
         _tasks.value = allTasks.toList()
+        closeAddDialog()
     }
 
     fun toggleDone(id: Int) {
@@ -36,6 +60,7 @@ class TaskViewModel : ViewModel() {
             if (task.id == updated.id) updated else task
         }
         _tasks.value = allTasks.toList()
+        closeEditDialog()
     }
 
     fun filterByDone(done: Boolean) {

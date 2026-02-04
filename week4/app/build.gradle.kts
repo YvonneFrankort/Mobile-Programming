@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.week1"
+    namespace = "com.example.viikkotehtava3_mobile_programming"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.week1"
+        applicationId = "com.example.viikkotehtava3_mobile_programming"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -43,23 +43,39 @@ android {
 }
 
 dependencies {
+    // Core + lifecycle
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+
+    // Compose BOM (use ONLY the version catalog one)
     implementation(platform(libs.androidx.compose.bom))
+
+    // Compose UI
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation("androidx.compose.material:material-icons-extended")
+
+    // ViewModel + Runtime Compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
 
+    // Navigation
+    implementation("androidx.navigation:navigation-compose:2.8.5")
 
+    // Coroutines (correct group)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+
+    // Tests
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 
+    // Debug tools
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
