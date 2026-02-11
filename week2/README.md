@@ -1,6 +1,6 @@
 # Mobile Programming with Native Technologies
 
-## Week 2 assignment
+## Week 2 ViewModel
 
 ### Overview
 
