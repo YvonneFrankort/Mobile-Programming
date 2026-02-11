@@ -1,6 +1,6 @@
 # Mobile Programming with Native Technologies
 
-## Week 1 assignment
+## Week 1 Basics of Kotlin
 
 
 
