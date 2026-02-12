@@ -1,6 +1,6 @@
 # Mobile Programming with Native Technologies
 
-## Week 5 Assignment – Weather App with Retrofit & Jetpack Compose
+## Week 5 Assignment – Weather App with Retrofit & Open Weather
 
 ### Overview
 
@@ -39,18 +39,18 @@ The app allows the user to enter a city name, fetch the current weather, switch 
 ## What Retrofit Does
 Retrofit handles all HTTP requests to the OpenWeather API.
 
-### How it works in this app
+#### How it works in this app
 * Sends a GET request to the weather endpoint
 * Receives a JSON response
 * Converts JSON into Kotlin data classes automatically
 
-### How JSON coverts into a data class
+## How JSON coverts into a data class
 * through GsonConverterFactory.create()
 * Retrofit receives JSON
 * Gson converts it into our data classes (WeatherResponse, Main, Wind, etc.)
 * No manual parsing needed
 
-### How Coroutines Work Here
+## How Coroutines Work Here
 Coroutines allow the app to run network requests off the main thread.
 
 In this app:
@@ -60,7 +60,7 @@ In this app:
 * Compose automatically re-renders the screen
 * This keeps the app smooth and avoids blocking the UI.
 
-### How UI State Works
+## How UI State Works
 The app uses a simple WeatherUiState object inside the ViewModel.
 
 #### ViewModel responsibilities
@@ -72,7 +72,7 @@ The app uses a simple WeatherUiState object inside the ViewModel.
 * Observes the state
 * Automatically updates the UI when the state changes
 
-### How the API Key Is Stored
+## How the API Key Is Stored
 * The OpenWeather API key is not hardcoded.
 * The key is placed in local.properties
 * Gradle exposes it through BuildConfig
@@ -82,5 +82,8 @@ This keeps the key out of version control.
 ## APK
 The debug APK is included in the week5/ folder of this repository.
 
+## Demo video
+https://youtube.com/shorts/fabefcYOWQ4?feature=share
+
 ## Screenshot
-(Insert screenshot here)
+<img width="337" height="640" alt="wetaher_app" src="https://github.com/user-attachments/assets/21766418-6f4e-4c93-9fc5-dcce4a3ddda7" />
