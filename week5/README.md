@@ -1,131 +1,86 @@
 # Mobile Programming with Native Technologies
 
-## Week 4 assignment - Navigation with Jetpack Compose
+## Week 5 Assignment – Weather App with Retrofit & Jetpack Compose
 
 ### Overview
 
-This week extends the Week 3 ToDo app by adding **navigation between multiple screens** while keeping a **shared state** with MVVM.
+This week’s assignment was to build a simple weather application using:
+
+* Jetpack Compose for UI
+* Retrofit for network requests
+* Coroutines for background work
+* OpenWeather API for real weather data
+
+The app allows the user to enter a city name, fetch the current weather, switch between Celsius and Fahrenheit, and view sunrise/sunset times adjusted to the correct timezone.
 
 
 ### New Features
 
-* **HomeScreen**
-Displays the task list, same as Week 3.
+#### Weather Search
 
-* **CalendarScreen** 
-Displays the same tasks in a calendar view, grouped by date.
+* User enters a city name
+* App fetches current weather from OpenWeather API
+* Displays temperature, description, humidity, wind, min/max, sunrise, sunset
 
-* **SettingsScreen** 
-The SettingsScreen includes a working light/dark theme toggle
+#### Temperature Unit Toggle
+* Buttons to switch between °C and °F
+* UI updates instantly
+* Conversion is done in the UI layer
 
+#### Weather Icons
+* Real OpenWeather icons loaded with Coil
+* Matches the weather conditions (e.g., clear, clouds, rain)
 
-### What is Jetpack Compose Navigation
-Navigation is handled with **NavController** and **NavHost**.
+#### Timezone‑Correct Sunrise & Sunset
+* OpenWeather gives timestamps in UTC
+* App adds the city’s timezone offset
+* Times are formatted cleanly (HH:mm)
 
-Navigation is built using three main concepts:
-* **NavController**  
-  Switching between screens
+## What Retrofit Does
+Retrofit handles all HTTP requests to the OpenWeather API.
 
-* **NavHost**  
-  Defines the navigation graph and maps routes to composable screens.
+### How it works in this app
+* Sends a GET request to the weather endpoint
+* Receives a JSON response
+* Converts JSON into Kotlin data classes automatically
 
-* **Routes**  
-  String identifiers used to navigate between screens (e.g. "home", "calendar").
+### How JSON coverts into a data class
+* through GsonConverterFactory.create()
+* Retrofit receives JSON
+* Gson converts it into our data classes (WeatherResponse, Main, Wind, etc.)
+* No manual parsing needed
 
-In this application, a single NavController is used to navigate between HomeScreen, CalendarScreen, and SettingsScreen.
+### How Coroutines Work Here
+Coroutines allow the app to run network requests off the main thread.
 
-### Navigation UI
-The TopAppBar contains icons for navigating between Home, Calendar, and Settings.
-* Home → Calendar via calendar icon
-* Calendar → Home via list icon
-* Home → Settings via settings icon
-* Settings → Home via back arrow
+In this app:
+* API call runs inside viewModelScope.launch
+* The UI stays responsive
+* When the data arrives, the ViewModel updates the UI state
+* Compose automatically re-renders the screen
+* This keeps the app smooth and avoids blocking the UI.
 
-### Single-Activity Architecture
-* The entire app runs inside a single MainActivity.
-All navigation happens inside one activity using Jetpack Compose Navigation.
-* TaskViewModel is created at the activity level using by viewModels(), so it survives navigation and is shared across all screens.
+### How UI State Works
+The app uses a simple WeatherUiState object inside the ViewModel.
 
-### The Architecture (MVVM and Navigation)
-The application follows the **MVVM (Model–View–ViewModel)** architecture.
+#### ViewModel responsibilities
+* Holds the current weather data
+* Calls the API
+* Updates the UI state when data arrives
 
-* One TaskViewModel holds all tasks.
-* HomeScreen and CalendarScreen share the same ViewModel
-* Changes in one screen are immediately visible in the other
-* ViewModel survives navigation between screens
+#### Compose responsibilities
+* Observes the state
+* Automatically updates the UI when the state changes
 
-Because the same ViewModel instance is shared:
-* Changes made on one screen are immediately visible on the others.
-* The application state is preserved when navigating back and forth.
+### How the API Key Is Stored
+* The OpenWeather API key is not hardcoded.
+* The key is placed in local.properties
+* Gradle exposes it through BuildConfig
+* Retrofit reads it from BuildConfig.OPENWEATHER_API_KEY
+This keeps the key out of version control.
 
+## APK
+The debug APK is included in the week5/ folder of this repository.
 
-### How CalendarScreen works
-CalendarScreen presents tasks in a **calendar-like layout**.
-
-Instead of using a full calendar component, tasks are:
-* Grouped by their dueDate
-* Displayed under date headers (for example: 2026-01-30)
-
-This approach makes it clear:
-* Which tasks belong to which day
-* How the calendar concept relates to the task data
-
-The calendar view uses the same task data as HomeScreen, ensuring consistency across the app.
-
-
-### What AlertDialog does
-Adding and editing tasks is done using **AlertDialog** and not navigation.
-
-* **Add task**  
-  Triggered by an “Add” or “+” button.  
-  Opens a dialog where the user can enter task details and save or cancel.
-
-* **Edit task**  
-  Triggered by clicking an existing task.  
-  Opens a dialog with pre-filled values and allows the user to update or delete the task.
-
-Dialogs keep navigation focused on **screen-level changes** and handle temporary interactions.
-
-
-### APK
-
-The debug APK is included directly in the week4/ folder of this repository.
-
-
-### Demo video
-
-A short video to demonstrate the code and app on an emulator: 
-https://youtube.com/shorts/MTh03vpIk4Q?feature=share
-
-
-### Screenshot
-Home Screen
-
-<img width="339" height="596" alt="HomeScreen" src="https://github.com/user-attachments/assets/e66df666-57c6-47df-93c4-962bb5c3dd87" />
-
-
-Calendar Screen
-
-<img width="339" height="590" alt="CalendarScreen" src="https://github.com/user-attachments/assets/6c3dafe7-bf17-4d23-8900-e0714726fd85" />
-
-
-Settings Screen
-
-<img width="351" height="281" alt="SettingsScreen" src="https://github.com/user-attachments/assets/fdad632e-b842-4c35-8da9-0db9f29d5216" />
-
-
-Detail Screen
-
-<img width="345" height="614" alt="DetailScreen" src="https://github.com/user-attachments/assets/fafedbba-c4a9-4f13-af96-41299e10af6e" />
-
-
-
-
-
-
-
-
-
-
-
-
+## Screenshot
+(Insert screenshot here)
