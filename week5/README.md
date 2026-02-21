@@ -1,86 +1,117 @@
 # Mobile Programming with Native Technologies
 
-## Week 5 Assignment – Weather App with Retrofit & Jetpack Compose
+## Week  Assignment – Weather App with Room
 
 ### Overview
 
-This week’s assignment was to build a simple weather application using:
+This week’s assignment was to extend the Week 5 weather app by adding persistent storage using Room. The goal was to implement:
 
-* Jetpack Compose for UI
-* Retrofit for network requests
-* Coroutines for background work
-* OpenWeather API for real weather data
+* Entity
+* DAO
+* RoomDatabase
+* Repository
+* ViewModel
+* Flow/State
 
-The app allows the user to enter a city name, fetch the current weather, switch between Celsius and Fahrenheit, and view sunrise/sunset times adjusted to the correct timezone.
+The app now stores weather data locally, loads it from Room, and only refreshes from the API when needed.
 
 
-### New Features
+### Architecture
 
-#### Weather Search
+## Overview
+UI (Compose)
+   ↓ observes StateFlow
+ViewModel
+   ↓ calls suspend + Flow
+Repository
+   ↓ uses
+DAO (Room)
+   ↓ reads/writes
+SQLite Database
 
-* User enters a city name
-* App fetches current weather from OpenWeather API
-* Displays temperature, description, humidity, wind, min/max, sunrise, sunset
+## Structure
+The project follows a clean MVVM architecture where the UI never accesses the database or API directly.
 
-#### Temperature Unit Toggle
-* Buttons to switch between °C and °F
-* UI updates instantly
-* Conversion is done in the UI layer
+/data
+   /model
+      WeatherEntity.kt
+   /local
+      WeatherDao.kt
+      AppDatabase.kt
+   /remote
+      WeatherApi.kt
+   /repository
+      WeatherRepository.kt
 
-#### Weather Icons
-* Real OpenWeather icons loaded with Coil
-* Matches the weather conditions (e.g., clear, clouds, rain)
+/viewmodel
+   WeatherViewModel.kt
 
-#### Timezone‑Correct Sunrise & Sunset
-* OpenWeather gives timestamps in UTC
-* App adds the city’s timezone offset
-* Times are formatted cleanly (HH:mm)
+/ui
+   WeatherScreen.kt
+   WeatherResultSection.kt
 
-## What Retrofit Does
-Retrofit handles all HTTP requests to the OpenWeather API.
 
-### How it works in this app
-* Sends a GET request to the weather endpoint
-* Receives a JSON response
-* Converts JSON into Kotlin data classes automatically
+#### What Room does
+(Entity → DAO → Database → Repository → ViewModel → UI)
 
-### How JSON coverts into a data class
-* through GsonConverterFactory.create()
-* Retrofit receives JSON
-* Gson converts it into our data classes (WeatherResponse, Main, Wind, etc.)
-* No manual parsing needed
+Room provides the persistent local storage layer of the app.
+The data flow looks like this:
 
-### How Coroutines Work Here
-Coroutines allow the app to run network requests off the main thread.
+* # Entity
+Defines the structure of a weather record stored in the database (city, temperature, humidity, wind, sunrise, sunset, timestamp, etc.)
+* # DAO
+Contains the SQL operations:
+* getAllCities() 
+* getWeatherByCity(city)
+* insertWeather(entity)
+* deleteCity(city)
+* # RoomDatabase
+Creates the SQLite database and exposes the DAO.
+Implemented as a singleton using getDatabase.
+* # Repository  
+Handles data flow between Room and Retrofit. It:
+* Reads weather data from Room (Flow)
+* Fetches new weather from the API
+* Converts sunrise/sunset to local time
+* Saves updated weather into Room
+* # ViewModel
+* Collects DAO flows as StateFlow
+* Exposes UI state (cities, selected city, weather, loading, error, unit)
+* Implements caching logic
+* Handles add/delete/select city actions
+* Calls the repository when data needs refreshing
+* # UI
+* Observes ViewModel StateFlows
+* Displays the list of saved cities from Room
+* Shows weather details for the selected city
+* Triggers ViewModel actions (add, delete, refresh)
+* Automatically updates when Room data changes
 
-In this app:
-* API call runs inside viewModelScope.launch
-* The UI stays responsive
-* When the data arrives, the ViewModel updates the UI state
-* Compose automatically re-renders the screen
-* This keeps the app smooth and avoids blocking the UI.
+#### How Data flowsthrough the app
+1. The user adds or selects a city in the UI.
+2. The UI calls the ViewModel.
+3. The ViewModel reads the latest weather data from Room.
+4. If the data is fresh (< 30 minutes old), it is shown immediately.
+5. If the data is stale, the ViewModel asks the Repository to refresh it.
+6. The Repository fetches new weather from the API, converts sunrise/sunset, and saves it to Room.
+7. Room emits updated data via Flow.
+8. The ViewModel updates its StateFlow.
+9. Compose UI re-renders automatically
 
-### How UI State Works
-The app uses a simple WeatherUiState object inside the ViewModel.
+#### How does the catching logic work
+The app implements a simple caching mechanism:
+* Each weather entry includes a timestamp (System.currentTimeMillis).
+* When a city is selected, the ViewModel checks how old the data is.
+* If the data is less than 30 minutes old, the app uses the cached Room data.
+* If the data is older than 30 minutes, the app:
+- Fetches fresh weather from the API
+- Converts sunrise/sunset to local time
+- Saves the new entry into Room
+- UI updates automatically
+This reduces unnecessary API calls and fulfills the assignment’s caching requirement.
 
-#### ViewModel responsibilities
-* Holds the current weather data
-* Calls the API
-* Updates the UI state when data arrives
-
-#### Compose responsibilities
-* Observes the state
-* Automatically updates the UI when the state changes
-
-### How the API Key Is Stored
-* The OpenWeather API key is not hardcoded.
-* The key is placed in local.properties
-* Gradle exposes it through BuildConfig
-* Retrofit reads it from BuildConfig.OPENWEATHER_API_KEY
-This keeps the key out of version control.
-
-## APK
-The debug APK is included in the week5/ folder of this repository.
+#### Demo Video (YouTube)
+https://youtube.com/shorts/ShKCDcPHSjk?feature=share
 
 ## Screenshot
-(Insert screenshot here)
+

@@ -1,35 +1,43 @@
-/*
-ViewModel huolehtii:
-
-käyttäjän syöttämästä kaupungista
-API-kutsun tekemisestä coroutineilla
-virhetilojen käsittelystä
-UI-tilan tarjoamisesta Composelle
-ViewModelissa on:
-
-UI-tilan data class
-funktio kaupungin päivittämiseen
-funktio sään hakemiseen
-error-handling
-*/
-
 package com.weather.week5.viewmodel
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.weather.week5.data.model.WeatherResponse
-import com.weather.week5.data.remote.RetrofitInstance
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import com.weather.week5.data.local.AppDatabase
+import com.weather.week5.data.model.WeatherEntity
+import com.weather.week5.data.repository.WeatherRepository
+import com.weather.week5.data.remote.WeatherApi
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class WeatherViewModel : ViewModel() {
+class WeatherViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _city = MutableStateFlow("Lexington")
-    val city: StateFlow<String> = _city
+    private val repository: WeatherRepository
 
-    private val _weather = MutableStateFlow<WeatherResponse?>(null)
-    val weather: StateFlow<WeatherResponse?> = _weather
+    init {
+        // Create DAO and API
+        val dao = AppDatabase.getDatabase(application).weatherDao()
+        val api = WeatherApi.create()  // Retrofit API
+        repository = WeatherRepository(api, dao)
+    }
+
+    // Selected city state
+    private val _selectedCity = MutableStateFlow<String?>(null)
+    val selectedCity: StateFlow<String?> = _selectedCity
+
+    // All cities from Room
+    val allCities: StateFlow<List<WeatherEntity>> =
+        repository.getAllCities()
+            .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+    // Weather for selected city from Room
+    val weatherForSelectedCity: StateFlow<WeatherEntity?> =
+        _selectedCity
+            .flatMapLatest { city ->
+                if (city == null) flowOf(null)
+                else repository.getWeatherFromDb(city)
+            }
+            .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -44,43 +52,63 @@ class WeatherViewModel : ViewModel() {
         _unit.value = newUnit
     }
 
-    fun convertTemp(tempCelsius: Double): Double {
-        return if (_unit.value == "C") tempCelsius
-        else tempCelsius * 9 / 5 + 32
+    fun convertTemp(tempCelsius: Double): Double =
+        if (_unit.value == "C") tempCelsius else tempCelsius * 9 / 5 + 32
+
+    fun selectCity(city: String) {
+        _selectedCity.value = city
+        refreshWeather(city)
     }
 
+    fun refreshWeather(city: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _error.value = null
 
+            try {
+                val current = repository.getWeatherFromDb(city).firstOrNull()
+                val now = System.currentTimeMillis()
+                val thirtyMinutes = 30 * 60 * 1000
 
-    init {
-        fetchWeather()
+                // Only refresh if older than 30 minutes
+                if (current != null && now - current.timestamp < thirtyMinutes) {
+                    // Data is fresh; nothing to do
+                    return@launch
+                }
+
+                // Fetch real data from API → Room
+                repository.fetchWeatherFromApi(city)
+
+            } catch (e: Exception) {
+                _error.value = "Could not refresh weather."
+            } finally {
+                _isLoading.value = false
+            }
+        }
     }
 
-    fun onCityChanged(newCity: String) {
-        _city.value = newCity
-        _error.value = null
-        _weather.value = null
+    fun deleteCity(city: String) {
+        viewModelScope.launch {
+            repository.deleteCity(city)
+            if (_selectedCity.value == city) _selectedCity.value = null
+        }
     }
 
-    fun fetchWeather() {
-        val cityName = _city.value.trim()
-        if (cityName.isEmpty()) {
-            _error.value = "Please enter a city."
+    fun addCity(city: String) {
+        if (city.isBlank()) {
+            _error.value = "City cannot be empty."
+            return
+        }
+        val exists = allCities.value.any { it.cityName.equals(city, ignoreCase = true) }
+        if (exists) {
+            _error.value = "City already exists."
             return
         }
 
         viewModelScope.launch {
-            try {
-                _isLoading.value = true
-                _error.value = null
-
-                val result = RetrofitInstance.api.getWeatherByCity(cityName)
-
-                _weather.value = result
-            } catch (e: Exception) {
-                _error.value = "Could not load weather."
-            } finally {
-                _isLoading.value = false
-            }
+            // Insert a new city (fetch from API)
+            repository.fetchWeatherFromApi(city)
+            _selectedCity.value = city
         }
     }
 }

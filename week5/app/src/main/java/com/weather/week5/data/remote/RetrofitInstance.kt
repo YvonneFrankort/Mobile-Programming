@@ -1,6 +1,5 @@
 
-//Rakentaa Retrofit-olion.
-//Luo WeatherApi-instanssin.
+
 
 package com.weather.week5.data.remote
 

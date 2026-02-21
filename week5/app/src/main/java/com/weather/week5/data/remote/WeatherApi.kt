@@ -1,7 +1,5 @@
 package com.weather.week5.data.remote
 
-//Sisältää Retrofit-rajapinnan (interface).
-//Tänne tulee yksi funktio, joka tekee API-kutsun (city → WeatherResponse).
 
 import com.weather.week5.data.model.WeatherResponse
 import retrofit2.http.GET
@@ -19,4 +17,14 @@ interface WeatherApi {
         @Query("appid") apiKey: String = BuildConfig.OPEN_WEATHER_API_KEY,
         @Query("units") units: String = "metric"
     ): WeatherResponse
+
+    companion object {
+        fun create(): WeatherApi {
+            val retrofit = retrofit2.Retrofit.Builder()
+                .baseUrl("https://api.openweathermap.org/data/2.5/")
+                .addConverterFactory(retrofit2.converter.gson.GsonConverterFactory.create())
+                .build()
+            return retrofit.create(WeatherApi::class.java)
+        }
+    }
 }

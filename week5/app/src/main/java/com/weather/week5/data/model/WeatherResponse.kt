@@ -1,5 +1,3 @@
-//Vastaa OpenWeatherin JSON-rakennetta.
-//Luo dataluokat samoilla nimillä kuin API palauttaa.
 
 
 package com.weather.week5.data.model
