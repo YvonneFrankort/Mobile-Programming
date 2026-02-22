@@ -114,4 +114,6 @@ This reduces unnecessary API calls and fulfills the assignment’s caching requi
 https://youtube.com/shorts/ShKCDcPHSjk?feature=share
 
 ## Screenshot
+<img width="356" height="746" alt="Weather_Room" src="https://github.com/user-attachments/assets/e4670fa5-e05a-4762-ba0c-a3d2a560c1b9" />
+
 
