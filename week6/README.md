@@ -2,7 +2,7 @@
 
 ## Week  Assignment – Weather App with Room
 
-### Overview
+## Overview
 
 This week’s assignment was to extend the Week 5 weather app by adding persistent storage using Room. The goal was to implement:
 
@@ -16,9 +16,10 @@ This week’s assignment was to extend the Week 5 weather app by adding persiste
 The app now stores weather data locally, loads it from Room, and only refreshes from the API when needed.
 
 
-### Architecture
+## Architecture:
 
-## Overview
+### Overview
+```
 UI (Compose)
    ↓ observes StateFlow
 ViewModel
@@ -28,10 +29,11 @@ Repository
 DAO (Room)
    ↓ reads/writes
 SQLite Database
+```
 
-## Structure
+### Structure
 The project follows a clean MVVM architecture where the UI never accesses the database or API directly.
-
+```
 /data
    /model
       WeatherEntity.kt
@@ -49,45 +51,46 @@ The project follows a clean MVVM architecture where the UI never accesses the da
 /ui
    WeatherScreen.kt
    WeatherResultSection.kt
+```
 
 
-#### What Room does
+## What Room does
 (Entity → DAO → Database → Repository → ViewModel → UI)
 
 Room provides the persistent local storage layer of the app.
 The data flow looks like this:
 
-* # Entity
+### Entity
 Defines the structure of a weather record stored in the database (city, temperature, humidity, wind, sunrise, sunset, timestamp, etc.)
-* # DAO
+### DAO
 Contains the SQL operations:
 * getAllCities() 
 * getWeatherByCity(city)
 * insertWeather(entity)
 * deleteCity(city)
-* # RoomDatabase
+### RoomDatabase
 Creates the SQLite database and exposes the DAO.
 Implemented as a singleton using getDatabase.
-* # Repository  
+### Repository  
 Handles data flow between Room and Retrofit. It:
 * Reads weather data from Room (Flow)
 * Fetches new weather from the API
 * Converts sunrise/sunset to local time
 * Saves updated weather into Room
-* # ViewModel
+ ### ViewModel
 * Collects DAO flows as StateFlow
 * Exposes UI state (cities, selected city, weather, loading, error, unit)
 * Implements caching logic
 * Handles add/delete/select city actions
 * Calls the repository when data needs refreshing
-* # UI
+ ### UI
 * Observes ViewModel StateFlows
 * Displays the list of saved cities from Room
 * Shows weather details for the selected city
 * Triggers ViewModel actions (add, delete, refresh)
 * Automatically updates when Room data changes
 
-#### How Data flowsthrough the app
+## How Data flows through the app
 1. The user adds or selects a city in the UI.
 2. The UI calls the ViewModel.
 3. The ViewModel reads the latest weather data from Room.
@@ -98,7 +101,7 @@ Handles data flow between Room and Retrofit. It:
 8. The ViewModel updates its StateFlow.
 9. Compose UI re-renders automatically
 
-#### How does the catching logic work
+## How does the catching logic work
 The app implements a simple caching mechanism:
 * Each weather entry includes a timestamp (System.currentTimeMillis).
 * When a city is selected, the ViewModel checks how old the data is.
@@ -110,7 +113,7 @@ The app implements a simple caching mechanism:
 - UI updates automatically
 This reduces unnecessary API calls and fulfills the assignment’s caching requirement.
 
-#### Demo Video (YouTube)
+## Demo Video (YouTube)
 https://youtube.com/shorts/ShKCDcPHSjk?feature=share
 
 ## Screenshot
