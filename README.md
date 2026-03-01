@@ -6,9 +6,8 @@ This repository contains all coursework for the Mobile Programming with Native T
 - Week 2 – Task list app with ViewModel, add/toggle/remove tasks, filtering and sorting, APK, demo video (Full README is inside the week2 folder)
 - Week 3 - Improvement of the app architecture using MVVM and StateFlow, making the UI fully reactive (Full README is inside the week3 folder)
 - Week 4 - Adding navigation between multiple screens while keeping a shared state with MVVM (Full README is inside the week4 folder)
-- 
-- 
-More weeks will be added as the course progresses.
+- Week 5 - Weather App using Jetpack Compose, Retrofit, and the OpenWeather API (Full README is inside the week5 folder)
+- Week 6 - Adding persistent storage to the Weather App with Room (Full README is inside the week6 folder)
 
 ## Structure
 Root README → overview of the entire course
